@@ -15,6 +15,9 @@ namespace BethanysPieShopHRM.App.Pages
         [Inject]
         public IJobCategoryDataService JobCategoryDataService { get; set; }
 
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
 
         [Parameter]
         public string EmployeeId { get; set; }
@@ -98,6 +101,21 @@ namespace BethanysPieShopHRM.App.Pages
         {
             StatusClass = "alert-danger";
             Message = "There are some validation errors. Please try again.";
+        }
+
+        protected async Task DeleteEmployee()
+        {
+            await EmployeeDataService.DeleteEmployee(Employee.EmployeeId);
+
+            StatusClass = "alert-success";
+            Message = "Delete successfully";
+
+            Saved = true;
+        }
+
+        protected void NavigateToOverview()
+        {
+            NavigationManager.NavigateTo("/employeeoverview");
         }
 
     }
