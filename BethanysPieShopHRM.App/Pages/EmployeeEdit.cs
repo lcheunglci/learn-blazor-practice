@@ -1,6 +1,7 @@
 ﻿using BethanysPieShopHRM.App.Services;
 using BethanysPieShopHRM.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace BethanysPieShopHRM.App.Pages
 {
@@ -66,6 +67,16 @@ namespace BethanysPieShopHRM.App.Pages
             JobCategoryId = Employee.JobCategoryId.ToString();
         }
 
+        private IReadOnlyList<IBrowserFile> selectedFiles;
+
+        private void OnInputFileChange(InputFileChangeEventArgs eventArgs)
+        {
+            selectedFiles = eventArgs.GetMultipleFiles();
+            Message = $"{selectedFiles.Count} file(s) selected";
+            StateHasChanged();
+        }
+
+
         protected async Task HandleValidSubmit()
         {
             Saved = false;
@@ -74,6 +85,18 @@ namespace BethanysPieShopHRM.App.Pages
 
             if (Employee.EmployeeId == 0) // new
             {
+                if (selectedFiles != null) // take first image
+                {
+                    var file = selectedFiles[0];
+                    Stream stream = file.OpenReadStream();
+                    MemoryStream ms = new MemoryStream();
+                    await stream.CopyToAsync(ms);
+                    stream.Close();
+
+                    Employee.ImageName = file.Name;
+                    Employee.ImageContent = ms.ToArray();
+                }
+
                 var addedEmployee = await EmployeeDataService.AddEmployee(Employee);
                 if (addedEmployee != null)
                 {
