@@ -6,6 +6,10 @@ namespace BethanysPieShopHRM.App.Services
     {
         Task<IEnumerable<Employee>> GetAllEmployees();
 
+        Task<IEnumerable<Employee>> GetLongEmployeeList();
+
+        Task<IEnumerable<Employee>> GetTakeLongEmpoyeeList(int startindex, int count);
+
         Task<Employee> GetEmployeeDetails(int employeeId);
 
         Task<Employee> AddEmployee(Employee employee);

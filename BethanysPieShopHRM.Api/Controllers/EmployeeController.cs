@@ -27,6 +27,19 @@ namespace BethanysPieShopHRM.Api.Controllers
             return Ok(_employeeRepository.GetAllEmployees());
         }
 
+        [HttpGet("long")]
+        public IActionResult GetLongEmployeeList()
+        {
+            return Ok(_employeeRepository.GetLongEmployeeList());
+        }
+
+        [HttpGet("long/{startindex}/{count}")]
+        public IActionResult GetLongEmployeeList(int startindex, int count)
+        {
+            return Ok(_employeeRepository.GetTakeLongEmployeeList(startindex, count));
+        }
+
+
         [HttpGet("{id}")]
         public IActionResult GetEmployeeById(int id)
         {

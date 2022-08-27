@@ -1,4 +1,5 @@
 ﻿using BethanysPieShopHRM.Shared;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -11,6 +12,16 @@ namespace BethanysPieShopHRM.App.Services
         public EmployeeDataService(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        }
+
+        public async Task<IEnumerable<Employee>> GetLongEmployeeList()
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<Employee>>($"api/employee/long");
+        }
+
+        public async Task<IEnumerable<Employee>> GetTakeLongEmpoyeeList(int startindex, int count)
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<Employee>>($"api/employee/long/{startindex}/{count}");
         }
 
         public async Task<Employee> AddEmployee(Employee employee)
