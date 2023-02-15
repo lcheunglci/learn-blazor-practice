@@ -12,6 +12,19 @@ builder.Services.AddDbContext<EmployeeManagerDbContext>(opt => opt.UseSqlServer(
 
 var app = builder.Build();
 
+// Don't do this in production, just useful for development
+await EnsureDatabaseIsMigrated(app.Services);
+async Task EnsureDatabaseIsMigrated(IServiceProvider services)
+{
+    using var scope = services.CreateScope();
+    using var ctx = scope.ServiceProvider.GetService<EmployeeManagerDbContext>();
+    if (ctx is not null)
+    {
+        await ctx.Database.MigrateAsync();
+    }
+}
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
